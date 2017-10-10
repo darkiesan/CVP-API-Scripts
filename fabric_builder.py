@@ -334,7 +334,7 @@ server.addConfiglet( dc_configlet )
 configlet_list.append( dc_configlet )
 
 ##
-## Dummu comment
+## Dummy comment
 ##
 #
 # Create Container structure for new DC
