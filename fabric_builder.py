@@ -22,6 +22,7 @@ op.add_option( '-v', '--vxlanloopback', dest='vxlanloopback', action='store', he
 op.add_option( '-z', '--loopback', dest='loopback', action='store', help='Prefix to use for loobacks without last octet. Example: 192.168.0.', type='string')
 op.add_option( '-x', '--linknetworks', dest='linknetwork', action='store', help='Prefix to use for linknetworks without last octet. Example: 192.168.0.', type='string')
 op.add_option( '-t', '--type', dest='deploymenttype', action='store', help='Type of deployment, her for ip fabric HER, cvx for ip fabric cvx, evpn for ip fabric EVPN', type='string')
+op.add_option( '-a', '--debug', dest='debug', action='store', help='If debug is yes, nothing will actually be sent to CVP and proposed configs are written to terminal', type='string', default='no')
 
 opts, _ = op.parse_args()
 
@@ -42,6 +43,7 @@ vxlanloopback = opts.vxlanloopback
 loopback = opts.loopback
 linknetwork = opts.linknetwork
 deploymenttype = opts.deploymenttype
+debug = opts.debug
 
 parentName = 'Tenant'
 my_spine_container_name = name + " Spine"
@@ -102,18 +104,20 @@ for counter in range (1,no_leaf+1):
 
 	Leafs.append(leaf_dict)
 
-#print '%s' % ( json.dumps(DC, sort_keys=True, indent=4) )
-#print '!'
-#print '!'
-#print '!'
-#print '%s' % ( json.dumps(Leafs, sort_keys=True, indent=4) )
+if debug == "yes":
+	print '%s' % ( json.dumps(DC, sort_keys=True, indent=4) )
+	print '!'
+	print '!'
+	print '!'
+	print '%s' % ( json.dumps(Leafs, sort_keys=True, indent=4) )
 
 #
 # Connect and authenticate with CVP server
 #
 
-server = cvp.Cvp( host )
-server.authenticate( user , password )
+if debug == "no":
+	server = cvp.Cvp( host )
+	server.authenticate( user , password )
 
 #
 # Build base config configlets for spines and add them to CVP.
@@ -154,10 +158,15 @@ interface $local_interface
 
 		spine_base_config = spine_base_config + add_to_spine_config
 
-	spine_configlet_name = spine_switch['name'] + " configuration"
-	spine_configlet = cvp.Configlet( spine_configlet_name , spine_base_config )
-	server.addConfiglet( spine_configlet )
-
+	if debug == "no":
+		spine_configlet_name = spine_switch['name'] + " configuration"
+		spine_configlet = cvp.Configlet( spine_configlet_name , spine_base_config )
+		server.addConfiglet( spine_configlet )
+	else:
+		print "%s" % ( spine_base_config )
+		print "!"
+		print "!"
+		print "!"
 #
 # Create config unique for spine in cvx and her deployment types
 #
@@ -211,9 +220,16 @@ router bgp 65000
 """).safe_substitute(Replacements)
 			spine_bgp_config = spine_bgp_config + add_to_sping_bgp_config
 
-	spine_bgp_configlet_name = spine_switch['name'] + " BGP configuration"
-	spine_bgp_configlet = cvp.Configlet( spine_bgp_configlet_name , spine_bgp_config )
-	server.addConfiglet( spine_bgp_configlet )
+	if debug == "no":
+		spine_bgp_configlet_name = spine_switch['name'] + " BGP configuration"
+		spine_bgp_configlet = cvp.Configlet( spine_bgp_configlet_name , spine_bgp_config )
+		server.addConfiglet( spine_bgp_configlet )
+	else:
+		print "%s" % ( spine_bgp_config )
+		print "!"
+		print "!"
+		print "!"
+
 
 #
 # Build base config configlets for leafs and add them to CVP.
@@ -294,9 +310,16 @@ interface $interface
 # Based on all config, create configlets
 #
 
-	leaf_configlet_name = leaf['name'] + " configuration"
-	leaf_configlet = cvp.Configlet( leaf_configlet_name , leaf_config )
-	server.addConfiglet( leaf_configlet )
+	if debug == "no":
+		leaf_configlet_name = leaf['name'] + " configuration"
+		leaf_configlet = cvp.Configlet( leaf_configlet_name , leaf_config )
+		server.addConfiglet( leaf_configlet )
+	else:
+		print "%s" % ( leaf_config )
+		print "!"
+		print "!"
+		print "!"
+
 
 #
 # Create needed configlets for the new DC
@@ -329,20 +352,28 @@ management api http-commands
    no shutdown
 """).safe_substitute(Replacements)
 
-dc_configlet = cvp.Configlet( dc_configlet_name , dc_base_config  )
-server.addConfiglet( dc_configlet )
-configlet_list.append( dc_configlet )
+if debug == "no":
+	dc_configlet = cvp.Configlet( dc_configlet_name , dc_base_config  )
+	server.addConfiglet( dc_configlet )
+	configlet_list.append( dc_configlet )
+else:
+		print "%s" % ( dc_base_config )
+		print "!"
+		print "!"
+		print "!"
+
 
 #
 # Create Container structure for new DC
 #
 
-my_dc_container = cvp.Container( name, parentName )
-server.addContainer( my_dc_container )
-server.mapConfigletToContainer( my_dc_container , configlet_list )
+if debug == "no":
+	my_dc_container = cvp.Container( name, parentName )
+	server.addContainer( my_dc_container )
+	server.mapConfigletToContainer( my_dc_container , configlet_list )
 
-my_leaf_container = cvp.Container( my_leaf_container_name , name )
-server.addContainer( my_leaf_container )
+	my_leaf_container = cvp.Container( my_leaf_container_name , name )
+	server.addContainer( my_leaf_container )
 
-my_spine_container = cvp.Container( my_spine_container_name , name )
-server.addContainer( my_spine_container )
+	my_spine_container = cvp.Container( my_spine_container_name , name )
+	server.addContainer( my_spine_container )
