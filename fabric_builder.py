@@ -116,7 +116,8 @@ server = cvp.Cvp( host )
 server.authenticate( user , password )
 
 #
-# Build configlets for spines and add them to CVP
+# Build base config configlets for spines and add them to CVP.
+# Start with config that is the same in all deployment types.
 #
 
 for spine_switch in DC:
@@ -156,8 +157,12 @@ interface $local_interface
 	spine_configlet_name = spine_switch['name'] + " configuration"
 	spine_configlet = cvp.Configlet( spine_configlet_name , spine_base_config )
 	server.addConfiglet( spine_configlet )
-	
-	if deploymenttype == "her" or deploymenttype== "cvx":
+
+#
+# Create config unique for spine in cvx and her deployment types
+#
+
+	if deploymenttype == "her" or deploymenttype == "cvx":
 		Replacements = {
 						"routerid": spine_switch['loopback'],
 						"linknet": linknetwork
@@ -174,6 +179,10 @@ router bgp 65000
    neighbor leafs maximum-routes 12000 
    redistribute connected  
 """).safe_substitute(Replacements)
+
+#
+# Create config unique for spine in evpn deployment type
+#
 
 	if deploymenttype == "evpn":
 		Replacements = {
@@ -205,8 +214,10 @@ router bgp 65000
 	spine_bgp_configlet_name = spine_switch['name'] + " BGP configuration"
 	spine_bgp_configlet = cvp.Configlet( spine_bgp_configlet_name , spine_bgp_config )
 	server.addConfiglet( spine_bgp_configlet )
+
 #
-# Build configlets for leafs and add them to CVP
+# Build base config configlets for leafs and add them to CVP.
+# Start with config that is the same in all deployment types.
 #
 
 for leaf in Leafs:
@@ -225,11 +236,42 @@ interface Loopback0
 interface Loopback1
    ip address $vxlan/32
 !
+""").safe_substitute(Replacements)
+
+#
+# Create Vxlan1 config based on CVX
+#
+
+	if deploymenttype == "cvx":
+		Replacements = { "dummy": "dummy"
+						}
+		vxlan_add_to_leaf_config = Template("""
+interface Vxlan1
+   vxlan source-interface Loopback1
+   vxlan udp-port 4789
+   vxlan controller-client
+!
+""").safe_substitute(Replacements)
+		leaf_config = leaf_config + vxlan_add_to_leaf_config
+
+#
+# Create Vxlan1 config based on HER
+#
+
+	if deploymenttype == "her":
+		Replacements = { "dummy": "dummy"
+						}
+		vxlan_add_to_leaf_config = Template("""
 interface Vxlan1
    vxlan source-interface Loopback1
    vxlan udp-port 4789
 !
 """).safe_substitute(Replacements)
+		leaf_config = leaf_config + vxlan_add_to_leaf_config
+
+#
+# Build interface config for each leaf
+#
 
 	for spine_switch in DC:
 		for interface in spine_switch['interfaces']:
@@ -247,6 +289,10 @@ interface $interface
 !
 """).safe_substitute(Replacements)
 				leaf_config = leaf_config + add_to_leaf_config
+
+#
+# Based on all config, create configlets
+#
 
 	leaf_configlet_name = leaf['name'] + " configuration"
 	leaf_configlet = cvp.Configlet( leaf_configlet_name , leaf_config )
