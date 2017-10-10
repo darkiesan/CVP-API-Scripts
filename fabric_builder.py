@@ -321,7 +321,7 @@ router bgp $asn
    neighbor spines ebgp-multihop 4
    neighbor spines maximum-routes 12000 
 """).safe_substitute(Replacements)
-		
+
 #
 # Build interface config for each leaf
 #
@@ -353,7 +353,7 @@ interface $interface
 					leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
 
 				else:
-					
+					print "FOO"				
 #
 # Based on all config, create configlets
 #
