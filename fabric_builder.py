@@ -21,7 +21,7 @@ op.add_option( '-o', '--mgmtnetmask', dest='mgmtnetmask', action='store', help='
 op.add_option( '-v', '--vxlanloopback', dest='vxlanloopback', action='store', help='Prefix to use for VXLAN loobacks without last octet. Example: 192.168.0.', type='string')
 op.add_option( '-z', '--loopback', dest='loopback', action='store', help='Prefix to use for loobacks without last octet. Example: 192.168.0.', type='string')
 op.add_option( '-x', '--linknetworks', dest='linknetwork', action='store', help='Prefix to use for linknetworks without last octet. Example: 192.168.0.', type='string')
-op.add_option( '-t', '--type', dest='deploymenttype', action='store', help='Type of deployment, ip for ip fabric (HER and CVX), evpn for EVPN', type='string')
+op.add_option( '-t', '--type', dest='deploymenttype', action='store', help='Type of deployment, her for ip fabric HER, cvx for ip fabric cvx, evpn for ip fabric EVPN', type='string')
 
 opts, _ = op.parse_args()
 
@@ -157,7 +157,7 @@ interface $local_interface
 	spine_configlet = cvp.Configlet( spine_configlet_name , spine_base_config )
 	server.addConfiglet( spine_configlet )
 	
-	if deploymenttype == "ip":
+	if deploymenttype == "her" or deploymenttype== "cvx":
 		Replacements = {
 						"routerid": spine_switch['loopback'],
 						"linknet": linknetwork
