@@ -285,6 +285,43 @@ interface Vxlan1
 """).safe_substitute(Replacements)
 		leaf_config = leaf_config + vxlan_add_to_leaf_config
 
+	if deploymenttype == "her" or deploymenttype == "cvx":
+		Replacements = {
+						"routerid": leaf['loopback']
+						}
+		leaf_bgp_config = Template("""
+router bgp 65001
+   router-id $routerid
+   maximum-paths 4
+   neighbor spines peer-group
+   neighbor spines remote-as 65000
+   neighbor spines allowas-in 3
+   neighbor spines ebgp-multihop 4
+   neighbor spines maximum-routes 12000 
+""").safe_substitute(Replacements)
+	else:
+		Replacements = {
+						"asn": "foo",
+						"routerid": leaf['loopback']
+						}
+		leaf_bgp_config = Template("""
+router bgp $asn
+   router-id $routerid
+   neighbor EVPN peer-group
+   neighbor EVPN update-source Loopback0
+   neighbor EVPN ebgp-multihop
+   neighbor EVPN send-community extended
+   neighbor EVPN maximum-routes 12000 
+   neighbor 192.168.101.3 peer-group EVPN
+   neighbor 192.168.101.3 remote-as 65002
+   neighbor spines peer-group
+   neighbor spines remote-as 65000
+   neighbor spines fall-over bfd
+   neighbor spines allowas-in 3
+   neighbor spines ebgp-multihop 4
+   neighbor spines maximum-routes 12000 
+""").safe_substitute(Replacements)
+		
 #
 # Build interface config for each leaf
 #
@@ -306,6 +343,17 @@ interface $interface
 """).safe_substitute(Replacements)
 				leaf_config = leaf_config + add_to_leaf_config
 
+				if deploymenttype == "her" or deploymenttype == "cvx":
+					Replacements = {
+									"neighborip": interface['neighbor_ip']
+									}
+					add_to_leaf_bgp_config = Template("""
+   neighbor $neighborip peer-group spines
+""").safe_substitute(Replacements)
+					leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
+
+				else:
+					
 #
 # Based on all config, create configlets
 #
