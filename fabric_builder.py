@@ -174,14 +174,14 @@ interface $local_interface
 	if deploymenttype == "her" or deploymenttype == "cvx":
 		Replacements = {
 						"routerid": spine_switch['loopback'],
-						"linknet": linknetwork
+						"linknet": linknetwork + "0/24"
 						}
 
 		spine_bgp_config = Template("""
 router bgp 65000
    router-id $routerid
    maximum-paths 4
-   bgp listen range $linknet0/24 peer-group leafs remote-as 65001
+   bgp listen range $linknet peer-group leafs remote-as 65001
    neighbor leafs peer-group
    neighbor leafs allowas-in 3
    neighbor leafs fall-over bfd
