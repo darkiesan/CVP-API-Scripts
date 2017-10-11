@@ -362,12 +362,18 @@ interface $interface
 		leaf_configlet_name = leaf['name'] + " configuration"
 		leaf_configlet = cvp.Configlet( leaf_configlet_name , leaf_config )
 		server.addConfiglet( leaf_configlet )
+		leaf_bgp_configlet_name = leaf['name'] + " bgp configuration"
+		leaf_bgp_configlet = cvp.Configlet( leaf_bgp_configlet_name , leaf_bgp_config )
+		server.addConfiglet( leaf_bgp_configlet )
 	else:
 		print "%s" % ( leaf_config )
 		print "!"
 		print "!"
 		print "!"
-
+		print "%s" % ( leaf_bgp_config )
+		print "!"
+		print "!"
+		print "!"
 
 #
 # Create needed configlets for the new DC
