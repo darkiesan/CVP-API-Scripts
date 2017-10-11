@@ -234,12 +234,13 @@ router bgp 65000
 #
 
 for leaf in Leafs:
-	Replacements = {
-					"hostname": leaf['name'],
-					"loopback": leaf['loopback'],
-					"vxlan": leaf['vxlan']
-					}
-	leaf_config = Template("""
+	if deploymenttype == "cvx" or deploymenttype == "her":
+		Replacements = {
+						"hostname": leaf['name'],
+						"loopback": leaf['loopback'],
+						"vxlan": leaf['vxlan']
+						}
+		leaf_config = Template("""
 !
 hostname $hostname
 !
@@ -251,6 +252,19 @@ interface Loopback1
 !
 """).safe_substitute(Replacements)
 
+	if deploymenttype == "evpn":
+		Replacements = {
+						"hostname": leaf['name'],
+						"loopback": leaf['loopback'],
+						}
+		leaf_config = Template("""
+!
+hostname $hostname
+!
+interface Loopback0
+   ip address $loopback/32
+!
+""").safe_substitute(Replacements)		
 #
 # Create Vxlan1 config based on CVX
 #
@@ -280,6 +294,17 @@ interface Vxlan1
    vxlan udp-port 4789
 !
 """).safe_substitute(Replacements)
+
+	if deploymenttype == "evpn":
+		Replacements = { "dummy": "dummy"
+						}
+		vxlan_add_to_leaf_config = Template("""
+interface Vxlan1
+   vxlan source-interface Loopback0
+   vxlan udp-port 4789
+!
+""").safe_substitute(Replacements)
+
 		leaf_config = leaf_config + vxlan_add_to_leaf_config
 
 	if deploymenttype == "her" or deploymenttype == "cvx":
@@ -295,7 +320,8 @@ router bgp 65001
    neighbor spines allowas-in 3
    neighbor spines ebgp-multihop 4
    neighbor spines maximum-routes 12000""").safe_substitute(Replacements)
-	else:
+
+	if deploymenttype ==  "evpn":
 		Replacements = {
 						"asn": "foo",
 						"routerid": leaf['loopback']
