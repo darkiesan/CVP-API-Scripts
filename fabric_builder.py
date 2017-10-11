@@ -186,8 +186,7 @@ router bgp 65000
    neighbor leafs allowas-in 3
    neighbor leafs fall-over bfd
    neighbor leafs maximum-routes 12000 
-   redistribute connected  
-""").safe_substitute(Replacements)
+   redistribute connected""").safe_substitute(Replacements)
 
 #
 # Create config unique for spine in evpn deployment type
@@ -206,8 +205,7 @@ router bgp 65000
    neighbor leafs peer-group
    neighbor leafs fall-over bfd
    neighbor leafs maximum-routes 12000 
-   redistribute connected  
-""").safe_substitute(Replacements)
+   redistribute connected""").safe_substitute(Replacements)
 
 		for interface in spine_switch['interfaces']:
 			Replacements = {
@@ -216,8 +214,7 @@ router bgp 65000
 							}
 			add_to_sping_bgp_config = Template("""
    neighbor $neighbor peer-group leafs
-   neighbor $neighbor remote-as $asn
-""").safe_substitute(Replacements)
+   neighbor $neighbor remote-as $asn""").safe_substitute(Replacements)
 			spine_bgp_config = spine_bgp_config + add_to_sping_bgp_config
 
 	if debug == "no":
@@ -297,8 +294,7 @@ router bgp 65001
    neighbor spines remote-as 65000
    neighbor spines allowas-in 3
    neighbor spines ebgp-multihop 4
-   neighbor spines maximum-routes 12000 
-""").safe_substitute(Replacements)
+   neighbor spines maximum-routes 12000""").safe_substitute(Replacements)
 	else:
 		Replacements = {
 						"asn": "foo",
@@ -319,8 +315,7 @@ router bgp $asn
    neighbor spines fall-over bfd
    neighbor spines allowas-in 3
    neighbor spines ebgp-multihop 4
-   neighbor spines maximum-routes 12000 
-""").safe_substitute(Replacements)
+   neighbor spines maximum-routes 12000""").safe_substitute(Replacements)
 
 #
 # Build interface config for each leaf
