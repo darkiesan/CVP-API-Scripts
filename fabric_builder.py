@@ -101,8 +101,9 @@ for counter in range (1,no_leaf+1):
 	vxlanloopbackcounter = vxlanloopbackcounter +1
 	leaf_dict['mgmt'] = mgmtnetwork + str(mgmtnetworkcounter)
 	mgmtnetworkcounter = mgmtnetworkcounter + 1
-	asn = 65000 + counter
-	leaf_dict['asn'] = asn
+	if deploymenttype == "evpn":
+		asn = 65000 + counter
+		leaf_dict['asn'] = asn
 
 	Leafs.append(leaf_dict)
 
@@ -375,12 +376,48 @@ interface $interface
 				if deploymenttype == "evpn":
 					Replacements = {
 									"neighborip": interface['neighbor_ip'],
-									"asn": interface['asn']
 					}
 					add_to_leaf_bgp_config = Template("""
-   neighbor $neighborip peer-group EVPN
-   neighbor $neighborip remote-as $asn""").safe_substitute(Replacements)
+   neighbor $neighborip peer-group spines""").safe_substitute(Replacements)
 					leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
+					
+	if deploymenttype == "evpn":
+		for evpnleaf in Leafs:
+			Replacements = {
+							"loopback": evpnleaf['loopback']
+							"asn": evpnleaf['asn']
+							}
+			add_to_leaf_bgp_config = Template("""
+   neighbor $loopback peer-group EVPN
+   neighbor $loopback remote-as $asn""").safe_substitute(Replacements)
+			leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
+
+			add_to_leaf_bgp_config = """
+   address-family evpn"""
+			leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
+
+		for evpnleaf in Leafs:
+			Replacements = {
+							"loopback": evpnleaf['loopback']
+							"asn": evpnleaf['asn']
+
+			add_to_leaf_bgp_config = Template("""
+      neighbor $loopback activate""").safe_substitute(Replacements)
+			leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
+
+			add_to_leaf_bgp_config = """
+   address-family ipv4
+   redistribute connected"""
+			leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
+
+		for evpnleaf in Leafs:
+			Replacements = {
+							"loopback": evpnleaf['loopback']
+							"asn": evpnleaf['asn']
+							
+			add_to_leaf_bgp_config = Template("""
+      no neighbor $loopback activate""").safe_substitute(Replacements)
+			leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
 
 #
 # Based on all config, create configlets
