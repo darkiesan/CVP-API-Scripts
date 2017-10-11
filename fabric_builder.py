@@ -383,43 +383,49 @@ interface $interface
 					
 	if deploymenttype == "evpn":
 		for evpnleaf in Leafs:
-			Replacements = {
-							"loopback": evpnleaf['loopback'],
-							"asn": evpnleaf['asn']
-							}
-			add_to_leaf_bgp_config = Template("""
+			if evpnleaf['loopback'] != leaf['loopback']:
+				Replacements = {
+								"loopback": evpnleaf['loopback'],
+								"asn": evpnleaf['asn']
+								}
+				add_to_leaf_bgp_config = Template("""
    neighbor $loopback peer-group EVPN
    neighbor $loopback remote-as $asn""").safe_substitute(Replacements)
-			leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
+				leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
 
-	add_to_leaf_bgp_config = """
+	if deploymenttype == "evpn":
+	
+		add_to_leaf_bgp_config = """
    address-family evpn"""
-	leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
+		leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
 
 	if deploymenttype == "evpn":
 		for evpnleaf in Leafs:
-			Replacements = {
-							"loopback": evpnleaf['loopback'],
-							"asn": evpnleaf['asn']
-							}
-			add_to_leaf_bgp_config = Template("""
+			if evpnleaf['loopback'] != leaf['loopback']:
+				Replacements = {
+								"loopback": evpnleaf['loopback'],
+								"asn": evpnleaf['asn']
+								}
+				add_to_leaf_bgp_config = Template("""
       neighbor $loopback activate""").safe_substitute(Replacements)
-			leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
+				leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
 
-	add_to_leaf_bgp_config = """
+	if deploymenttype == "evpn":
+		add_to_leaf_bgp_config = """
    address-family ipv4
-   redistribute connected"""
-	leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
+      redistribute connected"""
+		leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
 
 	if deploymenttype == "evpn":
 		for evpnleaf in Leafs:
-			Replacements = {
-							"loopback": evpnleaf['loopback'],
-							"asn": evpnleaf['asn']
-							}
-			add_to_leaf_bgp_config = Template("""
+			if evpnleaf['loopback'] != leaf['loopback']:
+				Replacements = {
+								"loopback": evpnleaf['loopback'],
+								"asn": evpnleaf['asn']
+								}
+				add_to_leaf_bgp_config = Template("""
       no neighbor $loopback activate""").safe_substitute(Replacements)
-			leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
+				leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
 
 #
 # Based on all config, create configlets
