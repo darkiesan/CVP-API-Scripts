@@ -414,7 +414,7 @@ interface $interface
 			Replacements = {
 							"loopback": evpnleaf['loopback'],
 							"asn": evpnleaf['asn']
-							
+							}
 			add_to_leaf_bgp_config = Template("""
       no neighbor $loopback activate""").safe_substitute(Replacements)
 			leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
