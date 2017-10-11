@@ -181,7 +181,7 @@ interface $local_interface
 router bgp 65000
    router-id $routerid
    maximum-paths 4
-   bgp listen range $linknet.0/24 peer-group leafs remote-as 65001
+   bgp listen range $linknet0/24 peer-group leafs remote-as 65001
    neighbor leafs peer-group
    neighbor leafs allowas-in 3
    neighbor leafs fall-over bfd
