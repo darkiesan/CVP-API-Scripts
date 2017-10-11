@@ -101,6 +101,8 @@ for counter in range (1,no_leaf+1):
 	vxlanloopbackcounter = vxlanloopbackcounter +1
 	leaf_dict['mgmt'] = mgmtnetwork + str(mgmtnetworkcounter)
 	mgmtnetworkcounter = mgmtnetworkcounter + 1
+	asn = 65000 + counter
+	leaf_dict['asn'] = asn
 
 	Leafs.append(leaf_dict)
 
@@ -323,7 +325,7 @@ router bgp 65001
 
 	if deploymenttype ==  "evpn":
 		Replacements = {
-						"asn": "foo",
+						"asn": leaf['asn'] ,
 						"routerid": leaf['loopback']
 						}
 		leaf_bgp_config = Template("""
@@ -372,8 +374,15 @@ interface $interface
    neighbor $neighborip peer-group spines""").safe_substitute(Replacements)
 					leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
 
-				else:
-					print "FOO"				
+				if deploymenttype == "evpn":
+					Replacements = {
+									"neighborip": interface['neighbor_ip'],
+									"asn": interface['asn']
+					}
+					add_to_leaf_bgp_config = Template("""
+   neighbor $neighborip peer-group EVPN
+   neighbor $neighborip remote-as $asn""").safe_substitute(Replacements)
+
 #
 # Based on all config, create configlets
 #
