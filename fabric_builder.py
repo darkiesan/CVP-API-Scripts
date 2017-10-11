@@ -344,7 +344,6 @@ router bgp $asn
    neighbor spines peer-group
    neighbor spines remote-as 65000
    neighbor spines fall-over bfd
-   neighbor spines allowas-in 3
    neighbor spines ebgp-multihop 4
    neighbor spines maximum-routes 12000""").safe_substitute(Replacements)
 
