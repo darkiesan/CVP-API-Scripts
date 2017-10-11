@@ -107,7 +107,7 @@ for counter in range (1,no_leaf+1):
 
 	Leafs.append(leaf_dict)
 
-if debug == "yes":
+if debug != "no":
 	print '%s' % ( json.dumps(DC, sort_keys=True, indent=4) )
 	print '!'
 	print '!'
@@ -166,6 +166,8 @@ interface $local_interface
 		spine_configlet = cvp.Configlet( spine_configlet_name , spine_base_config )
 		server.addConfiglet( spine_configlet )
 	else:
+		spine_configlet_name = spine_switch['name'] + " configuration"
+		print "Contents of configlet %s:" % ( spine_configlet_name )
 		print "%s" % ( spine_base_config )
 		print "!"
 		print "!"
@@ -225,6 +227,8 @@ router bgp 65000
 		spine_bgp_configlet = cvp.Configlet( spine_bgp_configlet_name , spine_bgp_config )
 		server.addConfiglet( spine_bgp_configlet )
 	else:
+		spine_bgp_configlet_name = spine_switch['name'] + " BGP configuration"
+		print "Contents of configlet %s:" % ( spine_bgp_configlet_name )
 		print "%s" % ( spine_bgp_config )
 		print "!"
 		print "!"
@@ -439,10 +443,14 @@ interface $interface
 		leaf_bgp_configlet = cvp.Configlet( leaf_bgp_configlet_name , leaf_bgp_config )
 		server.addConfiglet( leaf_bgp_configlet )
 	else:
+		leaf_configlet_name = leaf['name'] + " configuration"
+		print "Contents of configlet %s:" % ( leaf_configlet_name )
 		print "%s" % ( leaf_config )
 		print "!"
 		print "!"
 		print "!"
+		leaf_bgp_configlet_name = leaf['name'] + " bgp configuration"
+		print "Contents of configlet %s:" % ( leaf_bgp_configlet_name )
 		print "%s" % ( leaf_bgp_config )
 		print "!"
 		print "!"
@@ -484,6 +492,7 @@ if debug == "no":
 	server.addConfiglet( dc_configlet )
 	configlet_list.append( dc_configlet )
 else:
+		print "Contents of configlet %s:" % ( dc_configlet_name )
 		print "%s" % ( dc_base_config )
 		print "!"
 		print "!"
