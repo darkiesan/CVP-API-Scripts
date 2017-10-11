@@ -348,8 +348,7 @@ interface $interface
 									"neighborip": interface['neighbor_ip']
 									}
 					add_to_leaf_bgp_config = Template("""
-   neighbor $neighborip peer-group spines
-""").safe_substitute(Replacements)
+   neighbor $neighborip peer-group spines""").safe_substitute(Replacements)
 					leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
 
 				else:
