@@ -336,8 +336,6 @@ router bgp $asn
    neighbor EVPN ebgp-multihop
    neighbor EVPN send-community extended
    neighbor EVPN maximum-routes 12000 
-   neighbor 192.168.101.3 peer-group EVPN
-   neighbor 192.168.101.3 remote-as 65002
    neighbor spines peer-group
    neighbor spines remote-as 65000
    neighbor spines fall-over bfd
