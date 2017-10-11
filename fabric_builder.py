@@ -375,7 +375,7 @@ interface $interface
 
 				if deploymenttype == "evpn":
 					Replacements = {
-									"neighborip": interface['neighbor_ip'],
+									"neighborip": interface['neighbor_ip']
 					}
 					add_to_leaf_bgp_config = Template("""
    neighbor $neighborip peer-group spines""").safe_substitute(Replacements)
@@ -384,7 +384,7 @@ interface $interface
 	if deploymenttype == "evpn":
 		for evpnleaf in Leafs:
 			Replacements = {
-							"loopback": evpnleaf['loopback']
+							"loopback": evpnleaf['loopback'],
 							"asn": evpnleaf['asn']
 							}
 			add_to_leaf_bgp_config = Template("""
@@ -398,7 +398,7 @@ interface $interface
 
 		for evpnleaf in Leafs:
 			Replacements = {
-							"loopback": evpnleaf['loopback']
+							"loopback": evpnleaf['loopback'],
 							"asn": evpnleaf['asn']
 
 			add_to_leaf_bgp_config = Template("""
@@ -412,7 +412,7 @@ interface $interface
 
 		for evpnleaf in Leafs:
 			Replacements = {
-							"loopback": evpnleaf['loopback']
+							"loopback": evpnleaf['loopback'],
 							"asn": evpnleaf['asn']
 							
 			add_to_leaf_bgp_config = Template("""
