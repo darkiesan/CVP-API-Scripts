@@ -392,10 +392,11 @@ interface $interface
    neighbor $loopback remote-as $asn""").safe_substitute(Replacements)
 			leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
 
-			add_to_leaf_bgp_config = """
+	add_to_leaf_bgp_config = """
    address-family evpn"""
-			leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
+	leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
 
+	if deploymenttype == "evpn":
 		for evpnleaf in Leafs:
 			Replacements = {
 							"loopback": evpnleaf['loopback'],
@@ -405,11 +406,12 @@ interface $interface
       neighbor $loopback activate""").safe_substitute(Replacements)
 			leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
 
-			add_to_leaf_bgp_config = """
+	add_to_leaf_bgp_config = """
    address-family ipv4
    redistribute connected"""
-			leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
+	leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
 
+	if deploymenttype == "evpn":
 		for evpnleaf in Leafs:
 			Replacements = {
 							"loopback": evpnleaf['loopback'],
