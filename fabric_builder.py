@@ -380,6 +380,7 @@ interface $interface
 					add_to_leaf_bgp_config = Template("""
    neighbor $neighborip peer-group EVPN
    neighbor $neighborip remote-as $asn""").safe_substitute(Replacements)
+					leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
 
 #
 # Based on all config, create configlets
