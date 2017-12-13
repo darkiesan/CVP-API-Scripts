@@ -16,20 +16,21 @@ except NameError:
 import requests
 from requests import packages
 #import cvp
-from cvp_clearlake_1 import cvp
+#from cvp_clearlake_1 import cvp
+import cvp
 
 # Configuration settings, modify as needed.
 
 MIN_INTERVAL = 60  # This is the minimum recommended interval the script should run in seconds
-CVPSERVER = "10.83.30.9"  # CVP server name mandatory, use quotes
-SYSLOGSERVER = '/var/run/syslog'  # syslog server ip, mandatory if using syslog, use quotes
-EMAILFROM = None  # Email from address, use quotes, mandatory if using email
-EMAILTO = None  # Email To address, use quotes, mandatory if using email
+CVPSERVER = "192.168.200.10"  # CVP server name mandatory, use quotes
+SYSLOGSERVER = '192.168.200.214'  # syslog server ip, mandatory if using syslog, use quotes
+EMAILFROM = 'df@webkom.se'  # Email from address, use quotes, mandatory if using email
+EMAILTO = 'df@webkom.se'  # Email To address, use quotes, mandatory if using email
 
 #Needs to be a one time password for two factor auth with gmail.  generate a new app specific password and use that
 EMAILPASS = None  # Email password, mandatory if using gmail
-EMAILSERVER = None  # Email server, for gmail, 'smtp.gmail.com' mandatory if using mail
-EMAILPORT = 587  # Email server port, for gmail, 587 is default
+EMAILSERVER = '192.168.200.214'  # Email server, for gmail, 'smtp.gmail.com' mandatory if using mail
+EMAILPORT = 25  # Email server port, for gmail, 587 is default
 
 CURSTATUS = {}
 
