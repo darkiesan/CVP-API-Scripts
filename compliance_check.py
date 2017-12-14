@@ -78,14 +78,13 @@ if nonCompliant:
 							'device': nonCompliantDevice['device'],
 							'message': nonCompliantDevice['message']
 						}
-		print Replacements['device']
-		print Replacements['message']
-    	tmpbody = Template("""
+
+		tmpbody = Template("""
 Device $device is non-compliant due to: $message
 
 """).safe_substitute(Replacements)
-    	print tmpbody
-    	body = body + tmpbody
+		print tmpbody
+		body = body + tmpbody
 
 msg = MIMEText(body)
 msg['Subject'] = 'Device compliance report'
