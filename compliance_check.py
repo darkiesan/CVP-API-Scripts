@@ -40,11 +40,9 @@ for device in devices:
 		nonCompliantMessage = complianceCodes[compliance]
 		nonCompliantDevices = { 'device': device.fqdn,
 								'message': nonCompliantMessage }
-		nonCompliant.append( nonCompliantDevice)
+		nonCompliant.append(nonCompliantDevice)
 
-if nonCompliant != []:
-    body = ""
-    
+if nonCompliant:
 	for nonCompliantDevice in nonCompliant:
 		Replacements = {
 							'device': nonCompliantDevice['device'],
