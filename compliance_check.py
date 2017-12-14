@@ -75,10 +75,10 @@ for device in devices:
 print nonCompliant
 
 if nonCompliant:
-	for device in nonCompliant:
+	for nonCompliantDevice in nonCompliant:
 		Replacements = {
-							'device': device['device'],
-							'message': device['message']
+							'device': nonCompliantDevice['device'],
+							'message': nonCompliantDevice['message']
 						}
     	tmpbody = Template("""
 Device $device is non-compliant due to: $message
