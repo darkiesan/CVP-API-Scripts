@@ -87,13 +87,12 @@ Device $device is non-compliant due to: $message
     	body = body + tmpbody
     	print tmpbody
 
-	print body
+msg = MIMEText(body)
+msg['Subject'] = 'Device compliance report'
+msg['From'] = email
+msg['To'] = recipient
+msg = msg.as_string()
 
-	msg = MIMEText(body)
-	msg['Subject'] = 'Device compliance report'
-	msg['From'] = email
-	msg['To'] = recipient
-	msg = msg.as_string()
 #	try:
 #		emailserver = smtplib.SMTP(smtpserver, 25)
 #		emailserver.sendmail(email, recipient, msg)
