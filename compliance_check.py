@@ -86,7 +86,7 @@ Device $device is non-compliant due to: $message
 """).safe_substitute(Replacements)
     	body = body + tmpbody
 
-print body
+	print body
 
 	msg = MIMEText(body)
 	msg['Subject'] = 'Device compliance report'
