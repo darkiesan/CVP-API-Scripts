@@ -19,8 +19,15 @@ containerName = opts.container
 server = cvp.Cvp( host )
 server.authenticate( user , password )
 
-container = server.getContainer(containerName)
-events = server.containerComplianceCheck(container)
+#container = server.getContainer(containerName)
+#events = server.containerComplianceCheck(container)
 
-for event in events:
-	print event.complianceCode
+#for event in events:
+#	print event.complianceCode
+
+devices = server.getDevices()
+
+for device in devices:
+	compliance = server.deviceComplianceCheck(device)
+	print compliance
+	
