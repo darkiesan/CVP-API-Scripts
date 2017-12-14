@@ -62,6 +62,7 @@ server.authenticate( user , password )
 
 devices = server.getDevices()
 nonCompliant = []
+body = ""
 
 for device in devices:
 	compliance = server.deviceComplianceCheck(device)
