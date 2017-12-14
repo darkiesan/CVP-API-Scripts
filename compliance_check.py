@@ -76,6 +76,7 @@ print nonCompliant
 
 if nonCompliant:
 	for i in range(len(nonCompliant)):
+		print i
 		Replacements = {
 							'device': nonCompliant[i]['device'],
 							'message': nonCompliant[i]['message']
