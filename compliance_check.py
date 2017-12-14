@@ -67,15 +67,15 @@ for device in devices:
 	compliance = server.deviceComplianceCheck(device)
 	if compliance != 0:
 		nonCompliantMessage = complianceCodes[compliance]
-		nonCompliantDevices = { 'device': device.fqdn,
+		nonCompliantDevice = {	'device': device.fqdn,
 								'message': nonCompliantMessage }
 		nonCompliant.append(nonCompliantDevice)
 
 if nonCompliant:
-	for nonCompliantDevice in nonCompliant:
+	for device in nonCompliant:
 		Replacements = {
-							'device': nonCompliantDevice['device'],
-							'message': nonCompliantDevice['message']
+							'device': device['device'],
+							'message': device['message']
 						}
     	tmpbody = Template("""
 Device $device is non-compliant due to: $message
