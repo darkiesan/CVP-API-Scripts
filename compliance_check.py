@@ -85,15 +85,15 @@ Device $device is non-compliant due to: $message
 """).safe_substitute(Replacements)
 		body = body + tmpbody
 
-msg = MIMEText(body)
-msg['Subject'] = 'Device compliance report'
-msg['From'] = email
-msg['To'] = recipient
-msg = msg.as_string()
+	msg = MIMEText(body)
+	msg['Subject'] = 'Device compliance report'
+	msg['From'] = email
+	msg['To'] = recipient
+	msg = msg.as_string()
 
-try:
-	emailserver = smtplib.SMTP(smtpserver, 25)
-	emailserver.sendmail(email, recipient, msg)
-	emailserver.quit()
-except:
-	raise
+	try:
+		emailserver = smtplib.SMTP(smtpserver, 25)
+		emailserver.sendmail(email, recipient, msg)
+		emailserver.quit()
+	except:
+		raise
