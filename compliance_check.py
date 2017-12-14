@@ -74,7 +74,6 @@ for device in devices:
 
 if nonCompliant:
 	for nonCompliantDevice in nonCompliant:
-		print i
 		Replacements = {
 							'device': nonCompliantDevice['device'],
 							'message': nonCompliantDevice['message']
