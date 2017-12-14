@@ -44,6 +44,7 @@ for device in devices:
 
 if nonCompliant != []:
     body = ""
+    
 	for nonCompliantDevice in nonCompliant:
 		Replacements = {
 							'device': nonCompliantDevice['device'],
