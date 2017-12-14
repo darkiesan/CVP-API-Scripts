@@ -90,5 +90,7 @@ Device $device is non-compliant due to: $message
 	msg = msg.as_string()
 	try:
 		emailserver = smtplib.SMTP(smtpserver, 25)
+		emailserver.sendmail(email, recipient, msg)
+        emailserver.quit()
 	except:
 		raise
