@@ -72,16 +72,12 @@ for device in devices:
 								'message': nonCompliantMessage }
 		nonCompliant.append(nonCompliantDevice)
 
-print nonCompliant
-print nonCompliant[0]
-print nonCompliant[1]
-
 if nonCompliant:
-	for i in range(len(nonCompliant)):
+	for nonCompliantDevice in nonCompliant:
 		print i
 		Replacements = {
-							'device': nonCompliant[i]['device'],
-							'message': nonCompliant[i]['message']
+							'device': nonCompliantDevice['device'],
+							'message': nonCompliantDevice['message']
 						}
 		print Replacements['device']
 		print Replacements['message']
