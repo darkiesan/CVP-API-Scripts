@@ -20,4 +20,5 @@ server = cvp.Cvp( host )
 server.authenticate( user , password )
 
 container = server.getContainer(containerName)
-server.containerComplianceCheck(container)
+event = server.containerComplianceCheck(container)
+print event
