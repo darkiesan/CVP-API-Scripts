@@ -59,7 +59,7 @@ Device $device is non-compliant due to: $message
 	msg['From'] = email
 	msg['To'] = recipient
 	msg = msg.as_string()
-    	try:
-        	emailserver = smtplib.SMTP(smtpserver, 25)
-	    except:
-    	    raise
+	try:
+		emailserver = smtplib.SMTP(smtpserver, 25)
+	except:
+		raise
