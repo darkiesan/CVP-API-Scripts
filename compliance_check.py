@@ -73,6 +73,8 @@ for device in devices:
 		nonCompliant.append(nonCompliantDevice)
 
 print nonCompliant
+print nonCompliant[0]
+print nonCompliant[1]
 
 if nonCompliant:
 	for i in range(len(nonCompliant)):
