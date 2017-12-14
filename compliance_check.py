@@ -4,6 +4,35 @@ import cvp, optparse, smtplib
 from email.mime.text import MIMEText
 from string import Template
 
+# Compliance codes for devices and containers
+DEVICE_IN_COMPLIANCE = 0
+DEVICE_CONFIG_OUT_OF_SYNC = 1
+DEVICE_IMAGE_OUT_OF_SYNC = 2
+DEVICE_IMG_CONFIG_OUT_OF_SYNC = 3
+DEVICE_IMG_CONFIG_IN_SYNC = 4
+DEVICE_NOT_REACHABLE = 5
+DEVICE_IMG_UPGRADE_REQD = 6
+DEVICE_EXTN_OUT_OF_SYNC = 7
+DEVICE_CONFIG_IMG_EXTN_OUT_OF_SYNC = 8
+DEVICE_CONFIG_EXTN_OUT_OF_SYNC = 9
+DEVICE_IMG_EXTN_OUT_OF_SYNC = 10
+DEVICE_UNAUTHORIZED_USER = 11
+
+complianceCodes = {
+   DEVICE_IN_COMPLIANCE : 'In compliance',
+   DEVICE_CONFIG_OUT_OF_SYNC : 'Config out of sync',
+   DEVICE_IMAGE_OUT_OF_SYNC : 'Image out of sync',
+   DEVICE_IMG_CONFIG_OUT_OF_SYNC : 'Image and Config out of sync',
+   DEVICE_IMG_CONFIG_IN_SYNC : 'Unused',        # was: 'Image and Config in sync'
+   DEVICE_NOT_REACHABLE : 'Device not reachable',
+   DEVICE_IMG_UPGRADE_REQD : 'Image upgrade required',
+   DEVICE_EXTN_OUT_OF_SYNC : 'Extensions out of sync',
+   DEVICE_CONFIG_IMG_EXTN_OUT_OF_SYNC : 'Config, Image and Extensions out of sync',
+   DEVICE_CONFIG_EXTN_OUT_OF_SYNC : 'Config and Extensions out of sync',
+   DEVICE_IMG_EXTN_OUT_OF_SYNC : 'Image and Extensions out of sync',
+   DEVICE_UNAUTHORIZED_USER : 'Unauthorized User',
+}
+
 usage = 'usage: %prog [options]'
 op = optparse.OptionParser(usage=usage)
 op.add_option( '-c', '--cvphostname', dest='cvphostname', action='store', help='CVP host name FQDN or IP', type='string')
