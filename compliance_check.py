@@ -83,9 +83,9 @@ if nonCompliant:
 Device $device is non-compliant due to: $message
 
 """).safe_substitute(Replacements)
-		print tmpbody
 		body = body + tmpbody
 
+print body
 msg = MIMEText(body)
 msg['Subject'] = 'Device compliance report'
 msg['From'] = email
