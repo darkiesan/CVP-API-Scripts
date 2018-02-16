@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import cvp, optparse, smtplib
 from email.mime.text import MIMEText
