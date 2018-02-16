@@ -80,7 +80,7 @@ for counter in range(1,no_spine+1):
 		neighbor_dict = {}
 		neighbor_dict['neighbor'] = leaf_name
 		link = linknetwork + str(linksubnetcounter)
-		neighborlink = linknetwork + str(linksubnetcounter+1)
+		neighborlink = linknetwork + str(linksubnetcounter)
 		linksubnetcounter = linksubnetcounter + 2
 		neighbor_dict['linknet'] = link
 		neighbor_dict['neighbor_ip'] = neighborlink
