@@ -80,7 +80,7 @@ for counter in range(1,no_spine+1):
 		neighbor_dict = {}
 		neighbor_dict['neighbor'] = leaf_name
 		link = linknetwork + str(linksubnetcounter)
-		neighborlink = linknetwork + str(linksubnetcounter)
+		neighborlink = linknetwork + str(linksubnetcounter+1)
 		linksubnetcounter = linksubnetcounter + 2
 		neighbor_dict['linknet'] = link
 		neighbor_dict['neighbor_ip'] = neighborlink
@@ -417,7 +417,7 @@ interface $interface
 
 				if deploymenttype == "her" or deploymenttype == "cvx":
 					Replacements = {
-									"neighborip": interface['neighbor_ip']
+									"neighborip": str(int(interface['neighbor_ip']) -1)
 									}
 					add_to_leaf_bgp_config = Template("""
    neighbor $neighborip peer-group spines""").safe_substitute(Replacements)
@@ -425,7 +425,7 @@ interface $interface
 
 				if deploymenttype == "evpn":
 					Replacements = {
-									"neighborip": interface['neighbor_ip']
+									"neighborip": str(int(interface['neighbor_ip']) -1)
 					}
 					add_to_leaf_bgp_config = Template("""
    neighbor $neighborip peer-group spines""").safe_substitute(Replacements)
