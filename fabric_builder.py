@@ -22,6 +22,7 @@ op.add_option( '-v', '--vxlanloopback', dest='vxlanloopback', action='store', he
 op.add_option( '-z', '--loopback', dest='loopback', action='store', help='Prefix to use for loobacks without last octet. Example: 192.168.0.', type='string')
 op.add_option( '-x', '--linknetworks', dest='linknetwork', action='store', help='Prefix to use for linknetworks without last octet. Example: 192.168.0.', type='string')
 op.add_option( '-t', '--type', dest='deploymenttype', action='store', help='Type of deployment, her for ip fabric HER, cvx for ip fabric cvx, evpn for ip fabric EVPN', type='string')
+op.add_option( '-b', '--cvxserver', dest='cvxserver', action='store', help='IP address on CVX server', type='string')
 op.add_option( '-a', '--debug', dest='debug', action='store', help='If debug is yes, nothing will actually be sent to CVP and proposed configs are written to terminal', type='string', default='no')
 
 opts, _ = op.parse_args()
@@ -106,6 +107,10 @@ for counter in range (1,no_leaf+1):
 		leaf_dict['asn'] = asn
 
 	Leafs.append(leaf_dict)
+
+vteplist = ""
+for leaf in Leafs:
+	vteplist = vteplist + " " + leaf['vxlan']
 
 if debug != "no":
 	print '%s' % ( json.dumps(DC, sort_keys=True, indent=4) )
@@ -242,7 +247,7 @@ router bgp 65000
 #
 
 for leaf in Leafs:
-	if deploymenttype == "cvx" or deploymenttype == "her":
+	if deploymenttype == "her":
 		Replacements = {
 						"hostname": leaf['name'],
 						"loopback": leaf['loopback'],
@@ -264,6 +269,34 @@ interface Management1
    ip address $mgmtip/$mgmtnetmask
 !
 """).safe_substitute(Replacements)
+
+	if deploymenttype == "cvx":
+		Replacements = {
+						"hostname": leaf['name'],
+						"loopback": leaf['loopback'],
+						"vxlan": leaf['vxlan'],
+						"mgmtip": leaf['mgmt'],
+						"mgmtnetmask": mgmtnetmask,
+						"cvxserver": cvxserver
+						}
+		leaf_config = Template("""
+!
+hostname $hostname
+!
+interface Loopback0
+   ip address $loopback/32
+!
+interface Loopback1
+   ip address $vxlan/32
+!
+interface Management1
+   ip address $mgmtip/$mgmtnetmask
+!
+management cvx
+   no shutdoen
+   server host $cvxserver
+""").safe_substitute(Replacements)
+
 
 	if deploymenttype == "evpn":
 		Replacements = {
@@ -304,7 +337,8 @@ interface Vxlan1
 #
 
 	if deploymenttype == "her":
-		Replacements = { "dummy": "dummy"
+		Replacements = { "dummy": "dummy",
+						 "vteplist": vteplist
 						}
 		vxlan_add_to_leaf_config = Template("""
 interface Vxlan1
@@ -320,6 +354,7 @@ interface Vxlan1
 interface Vxlan1
    vxlan source-interface Loopback0
    vxlan udp-port 4789
+   vxlan flood vtep$vteplist
 !
 """).safe_substitute(Replacements)
 
@@ -457,7 +492,7 @@ interface $interface
 		leaf_configlet_name = leaf['name'] + " configuration"
 		print "Contents of configlet %s:" % ( leaf_configlet_name )
 		print "%s" % ( leaf_config )
-		print "!"
+		print "!"  
 		print "!"
 		print "!"
 		leaf_bgp_configlet_name = leaf['name'] + " bgp configuration"
