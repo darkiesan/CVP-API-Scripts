@@ -419,7 +419,7 @@ interface $interface
 
 				if deploymenttype == "her" or deploymenttype == "cvx":
 					Replacements = {
-									"neighborip": linknetwork + str(int(interface['neighborint']) -1)
+									"neighborip": linknetwork + str(int(interface['neighbor_int']) -1)
 									}
 					add_to_leaf_bgp_config = Template("""
    neighbor $neighborip peer-group spines""").safe_substitute(Replacements)
@@ -427,7 +427,7 @@ interface $interface
 
 				if deploymenttype == "evpn":
 					Replacements = {
-									"neighborip": linknetwork + str(int(interface['neighborint']) -1)
+									"neighborip": linknetwork + str(int(interface['neighbor_int']) -1)
 					}
 					add_to_leaf_bgp_config = Template("""
    neighbor $neighborip peer-group spines""").safe_substitute(Replacements)
