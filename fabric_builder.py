@@ -269,6 +269,8 @@ interface Management1
 		Replacements = {
 						"hostname": leaf['name'],
 						"loopback": leaf['loopback'],
+						"mgmtip": leaf['mgmt'],
+						"mgmtnetmask": mgmtnetmask
 						}
 		leaf_config = Template("""
 !
@@ -276,6 +278,9 @@ hostname $hostname
 !
 interface Loopback0
    ip address $loopback/32
+!
+interface Management1
+   ip address $mgmtip/$mgmtnetmask
 !
 """).safe_substitute(Replacements)		
 #
