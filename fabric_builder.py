@@ -156,6 +156,7 @@ interface Management1
 !
 interface $local_interface
    description $description
+   no switchport
    ip address $linknet/31
 !""").safe_substitute(Replacements)
 
@@ -245,7 +246,9 @@ for leaf in Leafs:
 		Replacements = {
 						"hostname": leaf['name'],
 						"loopback": leaf['loopback'],
-						"vxlan": leaf['vxlan']
+						"vxlan": leaf['vxlan'],
+						"mgmtip": leaf['mgmt'],
+						"mgmtnetmask": mgmtnetmask
 						}
 		leaf_config = Template("""
 !
@@ -256,6 +259,9 @@ interface Loopback0
 !
 interface Loopback1
    ip address $vxlan/32
+!
+interface Management1
+   ip address $mgmtip/$mgmtnetmask
 !
 """).safe_substitute(Replacements)
 
@@ -363,6 +369,7 @@ router bgp $asn
 !
 interface $interface
    description $description
+   no switchport
    ip address $neighbor_ip/31
 !
 """).safe_substitute(Replacements)
@@ -472,9 +479,6 @@ spanning-tree mode mstp
 !
 no aaa root
 !
-username becs privilege 15 secret 5 $1$edXmdxfz$lwH8NTWgA/q3DC8a456JN0
-username cvpadmin privilege 15 secret 5 $1$E6VAxeV9$rMrf9bnHXs0AkCM8RJ/kt0
-username df privilege 15 secret 5 $1$yorRLk72$Js0Z3mXVE0hydvFYGAQ0r.
 ip virtual-router mac-address 00:11:22:33:44:55
 !
 ip route 0.0.0.0/0 $defaultgw
