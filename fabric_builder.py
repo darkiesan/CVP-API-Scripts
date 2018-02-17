@@ -339,8 +339,7 @@ interface Vxlan1
 #
 
 	if deploymenttype == "her":
-		Replacements = { "dummy": "dummy",
-						 "vteplist": vteplist
+		Replacements = { "dummy": "dummy"
 						}
 		vxlan_add_to_leaf_config = Template("""
 interface Vxlan1
@@ -350,7 +349,8 @@ interface Vxlan1
 """).safe_substitute(Replacements)
 
 	if deploymenttype == "evpn":
-		Replacements = { "dummy": "dummy"
+		Replacements = { "dummy": "dummy",
+						"vteplist": vteplist
 						}
 		vxlan_add_to_leaf_config = Template("""
 interface Vxlan1
