@@ -499,8 +499,8 @@ interface $interface
 				leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
 
 	if deploymenttype == "evpn":
-		add_to_leaf_bgp_config = Template("""
-   address-family ipv4""")
+		add_to_leaf_bgp_config = """
+   address-family ipv4"""
 		leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
 		for evpnleaf in Leafs:
 			if evpnleaf['loopback'] != leaf['loopback']:
