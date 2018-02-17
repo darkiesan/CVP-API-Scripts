@@ -375,7 +375,9 @@ router bgp 65001
    neighbor spines remote-as 65000
    neighbor spines allowas-in 3
    neighbor spines ebgp-multihop 4
-   neighbor spines maximum-routes 12000""").safe_substitute(Replacements)
+   neighbor spines maximum-routes 12000
+   redistribute connected
+""").safe_substitute(Replacements)
 
 	if deploymenttype ==  "evpn":
 		Replacements = {
@@ -394,7 +396,8 @@ router bgp $asn
    neighbor spines remote-as 65000
    neighbor spines fall-over bfd
    neighbor spines ebgp-multihop 4
-   neighbor spines maximum-routes 12000""").safe_substitute(Replacements)
+   neighbor spines maximum-routes 12000
+""").safe_substitute(Replacements)
 
 #
 # Build interface config for each leaf
