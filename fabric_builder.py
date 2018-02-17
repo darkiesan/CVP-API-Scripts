@@ -343,6 +343,8 @@ management cvx
 !
 hostname $hostname
 !
+service routing protocols model multi-agent 
+!
 interface Loopback0
    ip address $loopback/32
 !
