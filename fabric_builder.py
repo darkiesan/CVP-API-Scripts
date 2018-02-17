@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2016, Arista Networks, Inc.
+#!/usr/bin/env python
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -29,8 +30,6 @@
 # OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
-
-#!/usr/bin/env python
 
 import cvp, optparse, json
 from string import Template
