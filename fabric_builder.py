@@ -499,6 +499,9 @@ interface $interface
 				leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
 
 	if deploymenttype == "evpn":
+		add_to_leaf_bgp_config = Template("""
+   address-family ipv4""")
+		leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
 		for evpnleaf in Leafs:
 			if evpnleaf['loopback'] != leaf['loopback']:
 				Replacements = {
@@ -506,7 +509,6 @@ interface $interface
 								"asn": evpnleaf['asn']
 								}
 				add_to_leaf_bgp_config = Template("""
-   address-family ipv4
       no neighbor $loopback activate""").safe_substitute(Replacements)
 				leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
 
