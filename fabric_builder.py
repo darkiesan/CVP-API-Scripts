@@ -44,6 +44,7 @@ vxlanloopback = opts.vxlanloopback
 loopback = opts.loopback
 linknetwork = opts.linknetwork
 deploymenttype = opts.deploymenttype
+cvxserver = opts.cvxserver
 debug = opts.debug
 
 parentName = 'Tenant'
