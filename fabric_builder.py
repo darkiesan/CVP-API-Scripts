@@ -296,7 +296,7 @@ interface Management1
    ip address $mgmtip/$mgmtnetmask
 !
 management cvx
-   no shutdoen
+   no shutdown
    server host $cvxserver
 """).safe_substitute(Replacements)
 
@@ -347,7 +347,7 @@ interface Vxlan1
 interface Vxlan1
    vxlan source-interface Loopback1
    vxlan udp-port 4789
-   vxlan flood vtep$vteplist
+   vxlan flood vtep $vteplist
 !
 """).safe_substitute(Replacements)
 
