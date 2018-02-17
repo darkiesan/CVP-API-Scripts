@@ -347,7 +347,7 @@ interface Vxlan1
 interface Vxlan1
    vxlan source-interface Loopback1
    vxlan udp-port 4789
-   vxlan flood vtep $vteplist
+   vxlan flood vtep$vteplist
 !
 """).safe_substitute(Replacements)
 		leaf_config = leaf_config + vxlan_add_to_leaf_config
