@@ -428,8 +428,7 @@ router bgp $asn
    neighbor spines remote-as 65000
    neighbor spines fall-over bfd
    neighbor spines ebgp-multihop 4
-   neighbor spines maximum-routes 12000
-""").safe_substitute(Replacements)
+   neighbor spines maximum-routes 12000""").safe_substitute(Replacements)
 
 #
 # Build interface config for each leaf
@@ -499,12 +498,6 @@ interface $interface
 				leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
 
 	if deploymenttype == "evpn":
-		add_to_leaf_bgp_config = """
-   address-family ipv4
-      redistribute connected"""
-		leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
-
-	if deploymenttype == "evpn":
 		for evpnleaf in Leafs:
 			if evpnleaf['loopback'] != leaf['loopback']:
 				Replacements = {
@@ -514,6 +507,12 @@ interface $interface
 				add_to_leaf_bgp_config = Template("""
       no neighbor $loopback activate""").safe_substitute(Replacements)
 				leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
+
+	if deploymenttype == "evpn":
+		add_to_leaf_bgp_config = """
+   address-family ipv4
+      redistribute connected"""
+		leaf_bgp_config = leaf_bgp_config + add_to_leaf_bgp_config
 
 #
 # Based on all config, create configlets
