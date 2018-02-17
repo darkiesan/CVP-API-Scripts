@@ -339,24 +339,24 @@ interface Vxlan1
 #
 
 	if deploymenttype == "her":
-		Replacements = { "dummy": "dummy"
-						}
-		vxlan_add_to_leaf_config = Template("""
-interface Vxlan1
-   vxlan source-interface Loopback1
-   vxlan udp-port 4789
-!
-""").safe_substitute(Replacements)
-
-	if deploymenttype == "evpn":
 		Replacements = { "dummy": "dummy",
 						"vteplist": vteplist
 						}
 		vxlan_add_to_leaf_config = Template("""
 interface Vxlan1
-   vxlan source-interface Loopback0
+   vxlan source-interface Loopback1
    vxlan udp-port 4789
    vxlan flood vtep$vteplist
+!
+""").safe_substitute(Replacements)
+
+	if deploymenttype == "evpn":
+		Replacements = { "dummy": "dummy"
+						}
+		vxlan_add_to_leaf_config = Template("""
+interface Vxlan1
+   vxlan source-interface Loopback0
+   vxlan udp-port 4789
 !
 """).safe_substitute(Replacements)
 
