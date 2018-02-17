@@ -1,6 +1,6 @@
+#!/usr/bin/env python
 #
 # Copyright (c) 2016, Arista Networks, Inc.
-#!/usr/bin/env python
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
