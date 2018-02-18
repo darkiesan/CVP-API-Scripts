@@ -420,6 +420,7 @@ router bgp 65001
 		leaf_bgp_config = Template("""
 router bgp $asn
    router-id $routerid
+   maximum-paths 4
    neighbor EVPN peer-group
    neighbor EVPN update-source Loopback0
    neighbor EVPN ebgp-multihop
