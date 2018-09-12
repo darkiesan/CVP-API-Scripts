@@ -3,6 +3,9 @@
 import cvp
 from string import Template
 
+#
+# Info needed
+#
 ip = '192.168.0.5'
 user = 'arista'
 password = 'arista'
