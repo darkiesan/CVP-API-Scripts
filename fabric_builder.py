@@ -494,7 +494,7 @@ interface Vxlan1
 """).safe_substitute(Replacements)
 		leaf_config = leaf_config + vxlan_add_to_leaf_config
 
-	if deploymenttype == "her" or deploymenttype == "cvx" and mlag == "no":
+	if deploymenttype != "evpn" and mlag == "no":
 		Replacements = {
 						"routerid": leaf['loopback']
 						}
@@ -509,7 +509,7 @@ router bgp 65001
    neighbor spines maximum-routes 12000
    redistribute connected""").safe_substitute(Replacements)
 
-	if deploymenttype == "her" or deploymenttype == "cvx" and mlag == "yes":
+	if deploymenttype != "evpn" and mlag == "yes":
 		Replacements = {
 						"routerid": leaf['loopback'],
 						"mlagpeer": leaf['mlagpeer']
